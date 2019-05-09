@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Logo</title>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.7.2/p5.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.7.2/addons/p5.dom.min.js"></script>
+    <script src="turtle.js"></script>
+    <script src="expression.js"></script>
+    <script src="parser.js"></script>
+    <script src="command.js"></script>
+    <script src="commandList.js"></script>
+    <script src="bounding_box.js"></script>
+    <script src="animation.js"></script>
+
+    <link rel="stylesheet" href="./style.css">
+    <link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet">
+</head>
+
+<body>
+	<div id="banner">
+		<img src="./assets/img/turtle.svg" style="width: 40px; height: 40px;" alt="">
+		<span id="LOGO">LOGO</span>
+        <select id="testdata" style="width: 150px;"></select>
+
+        <span class="ico_btn_dark" id="recentre" style="padding-top: 2px;" tooltip="Recentre">
+            <img src="./assets/img/reset.svg" style="width: 30px; height: 30px; padding: 2px;" alt="">
+        </span>
+
+        <span class="ico_btn_dark" id="bgcolor" style="padding-top: 2px;" tooltip="Random Background Color">
+            <img src="./assets/img/color.svg" style="width: 30px; height: 30px; padding: 2px;" alt="">
+        </span>
+	</div>
+
+	<!-- Canvas div -->
+	<div id="logo-canvas"></div>
+
+	<!-- Editor -->
+	<div id="resize-handle" class="resize-handle"><div></div></div>
+	<div id="editor-container" class="editor-container">
+		<div id="code_bg"></div>
+		<div class="textarea-container"><textarea id="code" cols="40" rows="4" autocomplete="false" spellcheck="false" autofocus></textarea></div>
+	</div>
+
+	<!-- Icon Copyright info -->
+	<small class="copyright-footer">
+		Icons made by <a href="https://www.flaticon.com/authors/freepik" title="Turtle">Turtle</a> from <a href="https://www.flaticon.com/"     title="Flaticon">www.flaticon.com</a> is licensed by <a href="http://creativecommons.org/licenses/by/3.0/"     title="Creative Commons BY 3.0" target="_blank">CC 3.0 BY</a>
+	</small>
+
+	<script src="sketch.js"></script>
+</body>
+
+</html>
