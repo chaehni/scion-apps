@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"io"
 	"log"
+	"net"
 	"net/http"
 	"time"
 
@@ -31,6 +32,10 @@ func getClient() *http.Client {
 				HandshakeTimeout: 1 * time.Second,
 			},
 		},
+		// don't handle redirects
+		CheckRedirect: func(req *http.Request, via []*http.Request) error {
+			return http.ErrUseLastResponse
+		},
 	}
 	return c
 }
@@ -45,18 +50,24 @@ func main() {
 	scionHandler := func(h http.Handler) http.Handler {
 		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 			// try to resolve the request to a SCION-enabled server
-			_, _, err := scionutil.GetHostByName(r.Host)
+
+			host, _, err := net.SplitHostPort(r.Host)
+			if err != nil {
+				host = r.Host
+			}
+			_, _, err = scionutil.GetHostByName(host)
 			if err == nil {
 				log.Printf("Serving %s request for %s%s over SCION\n", r.Method, r.Host, r.URL.Path)
 				client := getClient()
 				defer client.Transport.(*shttp.Transport).Close()
+
 				req, err := http.NewRequest(http.MethodGet, fmt.Sprintf("https://%s%s", r.Host, r.URL.Path), nil)
 				if err != nil {
 					fmt.Fprint(w, err)
 					return
 				}
 
-				// add X-Forwarded-For header
+				// add client to X-Forwarded-For header
 				req.Header.Add("X-Forwarded-For", r.RemoteAddr)
 				resp, respErr := client.Do(req)
 				if respErr != nil {
@@ -71,6 +82,8 @@ func main() {
 						w.Header().Add(name, v)
 					}
 				}
+				// write original status code to reply
+				w.WriteHeader(resp.StatusCode)
 
 				// return response to client
 				io.Copy(w, resp.Body)
